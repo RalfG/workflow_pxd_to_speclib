@@ -1,3 +1,9 @@
+# Data/output directories
+mgf/
+mzid/
+fasta/
+logs/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

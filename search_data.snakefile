@@ -1,0 +1,53 @@
+configfile: "conf/snakemake_config.json"
+
+RUNS, = glob_wildcards("mgf/{run}.mgf")
+
+
+rule search_targets:
+	input:
+		expand("mzid/{run}.pout", run=RUNS),
+		expand("mzid/{run}.pout_dec", run=RUNS)
+
+
+rule run_msgfplus:
+	input:
+		spectrum_file="mgf/{run}.mgf",
+		msgfplus_jar=config["search"]["msgfplus_jar"],
+		msgfplus_conf=config["search"]["msgfplus_conf"],
+		fasta=config["search"]["fasta"]
+	output:
+		"mzid/{run}.mzid"
+	log:
+		"logs/msgfplus/{run}.log"
+	resources:
+		mem_mb=10000
+	threads: 10
+	shell:
+		"""
+		java -Xmx10G -jar {input.msgfplus_jar} -thread {threads} -conf {input.msgfplus_conf} -d {input.fasta} -s {input.spectrum_file} -addFeatures 1
+		mkdir -p mzid
+		mv mgf/{wildcards.run}.mzid mzid/{wildcards.run}.mzid
+		"""
+
+
+rule create_pin:
+	input:
+		"mzid/{run}.mzid"
+	output:
+		"mzid/{run}.pin"
+	log:
+		"logs/msgf2pin/{run}.log"
+	shell:
+		"msgf2pin -P XXX {input} > {output}"
+
+
+rule run_percolator:
+	input:
+		"mzid/{run}.pin"
+	output:
+		pout="mzid/{run}.pout",
+		pout_dec="mzid/{run}.pout_dec"
+	log:
+		"logs/percolator/{run}.log"
+	shell:
+		"percolator --post-processing-tdc -U -m {output.pout} -M {output.pout_dec} {input}"
