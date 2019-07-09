@@ -1,14 +1,15 @@
 {
     "download": {
-        "pxd_identifier": "PXD003472",
+        "pxd_identifier": "PXD000000",
         "file_pattern": ".*"
     },
     "convert": {
         "exec": "ThermoRawFileParser.sh"
     },
     "search": {
-        "msgfplus_jar": "/home/compomics/MSGFPlus/MSGFPlus.jar",
 		"msgfplus_conf": "conf/msgfplus_params.txt",
-        "fasta": "fasta/yeast_crap.fasta"
+        "fasta": "fasta/search_db.fasta",
+        "msgfplus_exec": "msgf_plus",
+        "threads_per_search": 5
     }
 }

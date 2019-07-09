@@ -23,16 +23,19 @@ conda activate pxd_to_speclib
 ## Configuration
 All settings can be found in a JSON configuration file: `conf/snakemake_config.json`.
 
-To use a custom version of the ThermoRawFileParser, change
-```
-"convert": {
-    "exec": "ThermoRawFileParser.sh"
-}
-```
-to
-```
-"convert": {
-    "exec": "mono /path/to/ThermoRawFileParser.exe"
-}`
-```
-in the JSON config file.
+To use a custom version of the ThermoRawFileParser, change convert > exec to:
+- Using environment TRFP: `"ThermoRawFileParser.sh"`
+- Using custom TRFP: `"mono /path/to/ThermoRawFileParser.exe"`
+
+Idem for MSGFPlus, change search > msgfplus_exec to:
+- Using environment MSGFPlus: `msgf_plus`
+- Using custom jar file: `"msgfplus_exec": "java -Xmx5000M -jar /path/to/MSGFPlus/MSGFPlus.jar"`
+
+The latter allows a custom memory limit for the Java VM. By default, this is 1GB.
+
+The option search > threads_per_search defines the number of threads each
+individual search can use. In combination with the snakemake `--cores x` option,
+this allows you to constrict the number of parallel searches. E.g.: the
+combination of `--cores 24` and `threads_per_search: 6` limits the number of
+parallel searches to 4. This can be convenient if you would run into memory
+issues caused by too many parallel searches.
