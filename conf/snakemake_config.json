@@ -8,7 +8,7 @@
     },
     "search": {
 		"msgfplus_conf": "conf/msgfplus_params.txt",
-        "fasta": "fasta/search_db.fasta",
+        "fasta": "path/to/search_db.fasta",
         "msgfplus_exec": "msgf_plus",
         "threads_per_search": 5
     }
