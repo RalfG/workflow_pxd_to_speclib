@@ -83,8 +83,8 @@ def run():
 
     # Download files
     print("Downloading files...")
-    response = get_files_df(args)
-    for ext in extensions:
+    response = get_files_df(args.pxd_identifier, args.filetypes, args.pattern)
+    for ext in args.filetypes:
         if not os.path.exists(ext):
             os.mkdir(ext)
         count = 0

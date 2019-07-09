@@ -25,7 +25,7 @@ rule download:
 	log:
 		"logs/download_pride_project/log.log"
 	shell:
-		"python3 scripts/download_pride_project.py -f raw -p {config[download][file_pattern]} {config[download][pxd_identifier]}"
+		"python3 scripts/download_pride_project.py -f raw -p '{config[download][file_pattern]}' {config[download][pxd_identifier]}"
 
 
 rule convert_to_mgf:
