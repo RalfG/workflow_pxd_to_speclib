@@ -8,9 +8,6 @@ argument certain file types can be chosen for download.
 **Output:** Downloaded files, sorted in folders by file type
 """
 
-# --------------
-# Import modules
-# --------------
 import os
 import json
 import requests
@@ -20,7 +17,7 @@ import wget
 import pandas as pd
 
 
-def ArgParse():
+def argument_parser():
     parser = argparse.ArgumentParser(description='Download files from PRIDE Archive for a given project.')
     parser.add_argument('pxd_identifier', action='store',
                         help='PXD identifier of project from which to download files')
@@ -61,7 +58,7 @@ def get_files_df(pxd_identifier, filetypes, pattern):
 
 
 def run():
-    args = ArgParse()
+    args = argument_parser()
     get_meta_url = "https://www.ebi.ac.uk:443/pride/ws/archive/project"
 
     # Make folder for project and download meta data

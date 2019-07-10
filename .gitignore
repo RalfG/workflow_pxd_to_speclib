@@ -3,6 +3,10 @@ mgf/
 mzid/
 fasta/
 logs/
+speclib/
+
+# Snakemake
+.snakemake/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

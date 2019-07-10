@@ -1,0 +1,7 @@
+{
+    "modifications": [
+        {"name":"Acetyl", "unimod_accession":1},
+        {"name":"Oxidation", "unimod_accession":35},
+        {"name":"Carbamidomethyl", "unimod_accession":4}
+    ]
+}
