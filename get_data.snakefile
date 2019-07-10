@@ -34,4 +34,4 @@ rule convert_to_mgf:
 	output:
 		"mgf/{run}.mgf"
 	shell:
-		"ThermoRawFileParser.sh --input={input} --output_file={output} -f=0 -m=0"
+		"{config[convert][exec]} --input={input} --output_file={output} -f=0 -m=0"
