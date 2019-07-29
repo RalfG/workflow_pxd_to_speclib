@@ -1,6 +1,9 @@
+include: "get_data.snakefile"
 configfile: "conf/snakemake_config.json"
 
+
 RUNS, = glob_wildcards("mgf/{run}.mgf")
+#RUNS = get_runs(config["download"]["pxd_identifier"], ['raw'], config["download"]["file_pattern"])
 
 
 rule search_targets:

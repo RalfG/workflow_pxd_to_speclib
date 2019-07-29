@@ -5,5 +5,5 @@ include: "make_speclib.snakefile"
 
 rule targets:
 	input:
-		speclib/spectral_library.peprec,
-		speclib/spectral_library.mgf
+		"speclib/spectral_library.peprec",
+		"speclib/spectral_library.mgf"

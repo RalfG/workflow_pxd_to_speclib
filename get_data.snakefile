@@ -1,3 +1,4 @@
+include: "get_data.snakefile"
 configfile: "conf/snakemake_config.json"
 
 
