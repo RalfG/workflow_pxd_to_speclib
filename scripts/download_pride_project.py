@@ -29,11 +29,23 @@ def argument_parser():
     return args
 
 
+def check_pxd_id(pxd_identifier):
+    """
+    Assert if the project data for a given PXD identifier is accessable through
+    the PRIDE Archive API.
+    """
+    url = "https://www.ebi.ac.uk:443/pride/ws/archive/project/{}".format(pxd_identifier)
+    response = json.loads(requests.get(url).content.decode('utf-8'))
+    assert "accession" in response.keys(), "Could not access data for PXD ID '{}'".format(pxd_identifier)
+
+
 def get_files_df(pxd_identifier, filetypes, pattern):
     """
     Get DataFrame with files to download, filtered by extension and filename
     regex pattern.
     """
+    check_pxd_id(pxd_identifier)
+
     get_files_url = "https://www.ebi.ac.uk:443/pride/ws/archive/file/list/project"
 
     # Get dataframe with file info through PRIDE Archive REST API
