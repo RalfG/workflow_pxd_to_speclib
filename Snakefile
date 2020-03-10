@@ -1,6 +1,6 @@
-include: "get_data.snakefile"
-include: "search_data.snakefile"
-include: "make_speclib.snakefile"
+include: "get_data.smk"
+include: "search_data.smk"
+include: "make_speclib.smk"
 
 
 rule targets:
