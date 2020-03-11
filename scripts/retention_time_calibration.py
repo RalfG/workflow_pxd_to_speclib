@@ -1,20 +1,21 @@
-import csv
-import os
-import re
-from typing import Dict, Tuple, Union, List
 from glob import glob
+from typing import Dict, Tuple, Union, List
+import argparse
+import csv
 import logging
 import operator
+import os
+import re
+import json
 
-import matplotlib.pyplot as plt
+from pyteomics import mgf
 import numpy as np
 import pandas as pd
-from pyteomics import mgf
-import seaborn as sns
 import spectrum_utils.spectrum as sus
 
 
 class PeptideSpectrumMatch:
+    """Peptide spectrum match (PSM)."""
     def __init__(
         self,
         scan: Union[int, None] = None,
@@ -73,6 +74,7 @@ score={self.score})"
 
 
 class Run:
+    """One LC-MS run that lead to one raw file."""
     def __init__(
         self, run_name: Union[str, None] = None, mgf_dir: str = "", pout_dir: str = "",
     ):
@@ -399,6 +401,8 @@ class RunCollection:
             psms_calibrated = pd.concat(calibrated, axis=0)
 
             if plot:
+                import matplotlib.pyplot as plt
+                import seaborn as sns
                 plt.figure()
                 sns.lmplot(
                     data=psms_calibrated,
@@ -428,9 +432,51 @@ class RunCollection:
         return psms_calibrated_medians
 
 
-# TODO: Implement CLI
+def argument_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--mgf",
+        action="store",
+        required=True,
+        dest="mgf_path",
+        help="Path to mgf files"
+    )
+    parser.add_argument(
+        "--mzid",
+        action="store",
+        required=True,
+        dest="mzid_path",
+        help="Path to mzid files"
+    )
+    parser.add_argument(
+        "--output-file",
+        action="store",
+        required=True,
+        dest="output_file",
+        help="Path to output file"
+    )
+    parser.add_argument(
+        "--modifications",
+        action="store",
+        required=True,
+        dest="modifications_mapping",
+        help="Path to JSON with modifications key, containing `name` -> `unimod_accession` mapping"
+    )
+    args = parser.parse_args()
+    return args
+
+
 def main():
-  pass
-  
+    args = argument_parser()
+    with open(args.modifications_mapping, 'rt') as f:
+        mod_config = json.load(f)['modifications']
+    mod_mapping = {f"UNIMOD:{mod['unimod_accession']}": mod["name"] for mod in mod_config}
+
+    collection = RunCollection('dataset', mgf_subdir='mgf', pout_subdir='mzid')
+    collection.add_runs_by_glob(mod_mapping=mod_mapping)
+    psms_calibrated = collection.calibrate_collection(q_value_threshold=0.01)
+    psms_calibrated.to_csv(args.output_file, sep=' ', index=False)
+
+
 if __name__ == "__main__":
     main()

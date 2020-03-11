@@ -10,15 +10,22 @@ The workflow goes through the following steps:
 - Parse results to generate a spectral library
 
 ## Requirements
-- Conda
-- Python 3
-- Installed environment from `environment.yml`.
+- Conda (tested on Linux)
 
-Create and activate the environment:
+## Run the workflow
+1. Create and activate the environment:
 ```
-conda env create -f environment.yml
+conda env create -f envs/pxd_to_speclib.yml
 conda activate pxd_to_speclib
 ```
+2. Setup your configuration: 
+    - `conf/snakemake_config.json` (see [Configuration](#configuration))
+    - `conf/msgfplus_params.txt`
+    - Add required input files (e.g. fasta sequence database)
+
+3. Run the workflow:
+    - To create a general spectral library: `snakemake . --use-conda`
+    - To create a calibrated retention time dataset: `snakemake --snakefile make_rt_lib.smk --use-conda`
 
 ## Configuration
 All settings can be found in a JSON configuration file: `conf/snakemake_config.json`.
