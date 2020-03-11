@@ -2,8 +2,8 @@ include: "get_data.smk"
 configfile: "conf/snakemake_config.json"
 
 
-RUNS, = glob_wildcards("mgf/{run}.mgf")
-#RUNS = get_runs(config["download"]["pxd_identifier"], ['raw'], config["download"]["file_pattern"])
+#RUNS, = glob_wildcards("mgf/{run}.mgf")
+RUNS = get_runs(config["download"]["pxd_identifier"], ['raw'], config["download"]["file_pattern"])
 
 
 rule search_targets:
@@ -24,9 +24,9 @@ rule run_msgfplus:
 	threads: config['search']['threads_per_search']
 	shell:
 		"""
-		{config[search][msgfplus_exec]} -thread {config[search][threads_per_search]} -conf {input.msgfplus_conf} -d {input.fasta} -s {input.spectrum_file} -addFeatures 1
+		{config[search][msgfplus_exec]} -thread '{config[search][threads_per_search]}' -conf '{input.msgfplus_conf}' -d '{input.fasta}' -s '{input.spectrum_file}' -addFeatures 1
 		mkdir -p mzid
-		mv mgf/{wildcards.run}.mzid mzid/{wildcards.run}.mzid
+		mv 'mgf/{wildcards.run}.mzid' 'mzid/{wildcards.run}.mzid'
 		"""
 
 
@@ -38,7 +38,7 @@ rule create_pin:
 	log:
 		"logs/msgf2pin/{run}.log"
 	shell:
-		"msgf2pin -P XXX {input} > {output}"
+		"msgf2pin -P XXX '{input}' > '{output}'"
 
 
 rule run_percolator:
@@ -50,4 +50,4 @@ rule run_percolator:
 	log:
 		"logs/percolator/{run}.log"
 	shell:
-		"percolator --post-processing-tdc -U -m {output.pout} -M {output.pout_dec} {input}"
+		"percolator --post-processing-tdc -U -m '{output.pout}' -M '{output.pout_dec}' '{input}'"

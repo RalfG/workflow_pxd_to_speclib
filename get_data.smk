@@ -1,4 +1,3 @@
-include: "get_data.smk"
 configfile: "conf/snakemake_config.json"
 
 
@@ -26,7 +25,7 @@ rule download:
 	log:
 		"logs/download_pride_project/log.log"
 	shell:
-		"python3 scripts/download_pride_project.py -f raw -p '{config[download][file_pattern]}' {config[download][pxd_identifier]}"
+		"python3 scripts/download_pride_project.py -f raw -p '{config[download][file_pattern]}' '{config[download][pxd_identifier]}'"
 
 
 rule convert_to_mgf:
@@ -35,4 +34,4 @@ rule convert_to_mgf:
 	output:
 		"mgf/{run}.mgf"
 	shell:
-		"{config[convert][exec]} --input={input} --output_file={output} -f=0 -m=0"
+		"{config[convert][exec]} --input='{input}' --output_file='{output}' -f=0 -m=0"
